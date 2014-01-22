@@ -1,0 +1,26 @@
+{
+  "name": "nor-upcloud",
+  "version": "0.1.0",
+  "description": "Client module for Upcloud API",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Sendanor/nor-upcloud.git"
+  },
+  "keywords": [
+    "upcloud",
+    "cloud",
+    "vps",
+    "api",
+    "client"
+  ],
+  "author": "Jaakko-Heikki Heusala <jheusala@iki.fi>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sendanor/nor-upcloud/issues"
+  },
+  "homepage": "https://github.com/Sendanor/nor-upcloud"
+}
