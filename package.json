@@ -1,6 +1,6 @@
 {
   "name": "nor-upcloud",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Client module for Upcloud API",
   "main": "src/index.js",
   "scripts": {
@@ -23,9 +23,9 @@
     "url": "https://github.com/sendanor/nor-upcloud/issues"
   },
   "dependency": {
-    "nor-debug": "sendanor/nor-debug",
-	"nor-errors": "sendanor/nor-errors",
-	"q": "*"
+    "nor-debug": ">= 0.1.22 < 0.2.0",
+    "nor-errors": ">= 0.1.1 < 0.2.0",
+    "q": ">= 1.0.1 <1.1.0"
   },
   "homepage": "https://github.com/sendanor/nor-upcloud"
 }
