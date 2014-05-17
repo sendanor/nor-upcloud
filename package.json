@@ -1,6 +1,6 @@
 {
   "name": "nor-upcloud",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Client module for Upcloud API",
   "main": "src/index.js",
   "bin": {
