@@ -3,6 +3,9 @@
   "version": "0.1.4",
   "description": "Client module for Upcloud API",
   "main": "src/index.js",
+  "bin": {
+    "nor-upcloud": "bin/cli.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
