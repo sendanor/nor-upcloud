@@ -21,6 +21,17 @@ function UpcloudServer(opts, up) {
 	debug.assert(self.uuid).typeOf('string');
 }
 
+UpcloudServer.prototype.valueOf = function() {
+	var self = this;
+	var tmp = {};
+	Object.keys(self).filter(function(key) {
+		return key[0] !== '_';
+	}).forEach(function(key) {
+		tmp[key] = self[key];
+	});
+	return tmp;
+};
+
 /* Start server */
 UpcloudServer.prototype.start = function(opts) {
 	var self = this;

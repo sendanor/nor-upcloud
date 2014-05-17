@@ -22,6 +22,14 @@ function Upcloud(opts) {
 	debug.assert(self.auth).typeOf('string');
 }
 
+Upcloud.prototype.toString = function() {
+	return '' + self.host;
+};
+
+Upcloud.prototype.toJSON = function() {
+	return self.host;
+};
+
 /** Generic HTTPS request */
 Upcloud.prototype._request = function(path, body, method) {
 	debug.assert(path).typeOf('string');
@@ -41,7 +49,9 @@ Upcloud.prototype._request = function(path, body, method) {
 	url_opts.method = method || 'GET';
 	url_opts.headers = url_opts.headers || {};
 
-	debug.log('body = ' , body);
+	if(process.env.DEBUG_NOR_UPCLOUD !== undefined) {
+		debug.log('body = ' , body);
+	}
 
 	if(body && (url_opts.method === 'POST')) {
 		url_opts.headers['Content-Type'] = 'application/json';
@@ -66,19 +76,25 @@ Upcloud.prototype._request = function(path, body, method) {
 			}
 
 			if(res.statusCode === 429) {
-				debug.log("res = ", res);
+				if(process.env.DEBUG_NOR_UPCLOUD !== undefined) {
+					debug.log("res = ", res);
+				}
 				d.reject(new HTTPError(429, body));
 				return;
 			}
 
 			if(res.statusCode === 401) {
-				debug.log("res = ", res);
+				if(process.env.DEBUG_NOR_UPCLOUD !== undefined) {
+					debug.log("res = ", res);
+				}
 				d.reject(new HTTPError(401, body));
 				return;
 			}
 
 			if(res.statusCode !== 200) {
-				debug.log("res = ", res);
+				if(process.env.DEBUG_NOR_UPCLOUD !== undefined) {
+					debug.log("res = ", res);
+				}
 				d.reject(new HTTPError(res.statusCode, body));
 				return;
 			}
