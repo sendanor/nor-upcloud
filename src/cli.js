@@ -149,6 +149,62 @@ COMMANDS['server-info'] = function up_server_info(opts) {
 	});
 };
 
+/** Set server defails */
+COMMANDS['server-set'] = function up_server_info(opts) {
+	opts = opts || {};
+	var which = opts.uuid || opts.hostname || opts.title;
+	debug.assert(which).is('string');
+
+	var UP = this;
+	return UP.server().then(function(data) {
+		debug.assert(data).is('object');
+		debug.assert(data.servers).is('object');
+		debug.assert(data.servers.server).is('object');
+		var servers = data.servers.server;
+		debug.assert(servers).is('array');
+
+		var servers_map = {};
+
+		servers.forEach(function(server) {
+			servers_map[ server.uuid ] = server;
+			servers_map[ server.hostname ] = server;
+			servers_map[ server.title ] = server;
+		});
+
+		var server = servers_map[which];
+
+		debug.assert(server.uuid).is('uuid');
+
+		var data = {};
+
+		var accepted_keys = [];
+		if(opts.uuid !== undefined) {
+			accepted_keys.push('hostname');
+			accepted_keys.push('title');
+		} else if(opts.hostname !== undefined) {
+			accepted_keys.push('title');
+		}
+
+		accepted_keys.push('boot_order');
+		accepted_keys.push('core_number');
+		accepted_keys.push('firewall');
+		accepted_keys.push('memory_amount');
+		accepted_keys.push('nic_model');
+		accepted_keys.push('timezone');
+		accepted_keys.push('video_model');
+		accepted_keys.push('vnc');
+		accepted_keys.push('vnc_password');
+
+		accepted_keys.forEach(function(key) {
+			if(opts[key] !== undefined) {
+				data[key] = opts[key];
+			}
+		});
+
+		return server.modify(data);
+	});
+};
+
 /** JSON data view */
 VIEWS.json = function view_json(data) {
 	return Q.fcall(function stringify_json() {

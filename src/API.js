@@ -53,7 +53,7 @@ Upcloud.prototype._request = function(path, body, method) {
 		debug.log('body = ' , body);
 	}
 
-	if(body && (url_opts.method === 'POST')) {
+	if(body && ((url_opts.method === 'POST') || (url_opts.method === 'PUT') )) {
 		url_opts.headers['Content-Type'] = 'application/json';
 		url_opts.headers['Content-Length'] = body.length;
 	}
@@ -91,7 +91,7 @@ Upcloud.prototype._request = function(path, body, method) {
 				return;
 			}
 
-			if(res.statusCode !== 200) {
+			if(!( (res.statusCode >= 200) && (res.statusCode < 300) )) {
 				if(process.env.DEBUG_NOR_UPCLOUD !== undefined) {
 					debug.log("res = ", res);
 				}
@@ -106,7 +106,7 @@ Upcloud.prototype._request = function(path, body, method) {
 		d.reject(new TypeError(''+e));
 	});
 
-	if(body && (url_opts.method === 'POST')) {
+	if(body && ( (url_opts.method === 'POST') || (url_opts.method === 'PUT') ) ) {
 		req.write( body );
 	}
 	req.end();

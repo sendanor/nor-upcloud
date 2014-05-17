@@ -63,6 +63,51 @@ UpcloudServer.prototype.stop = function(opts) {
 	return self._up._request('/1.1/server/'+self.uuid+'/stop', body, 'POST');
 };
 
+/* Modify server */
+UpcloudServer.prototype.modify = function(opts) {
+	var self = this;
+	opts = opts || {};
+	debug.assert(opts).typeOf('object');
+	debug.assert(self.uuid).typeOf('string');
+	var data = {};
+
+	function parse_bool(x) {
+		if( (x === 'on') || (x === 'off') ) { return x; }
+		if(x === 'true') { return 'on'; }
+		if(x === 'false') { return 'off'; }
+		return (x === true) ? 'on' : 'off';
+	}
+
+	function parse_array(x) { 
+		if(is.array(x)) { return x.join(','); }
+		return ''+x;
+	}
+
+	var keys = {
+		'boot_order'    : parse_array,
+		'core_number'   : function(x) { return x; },
+		'firewall'      : parse_bool,
+		'hostname'      : function(x) { return ''+x; },
+		'memory_amount' : function(x) { return x; },
+		'nic_model'     : parse_array,
+		'title'         : function(x) { return ''+x; },
+		'timezone'      : function(x) { return ''+x; },
+		'video_model'   : function(x) { return ''+x; },
+		'vnc'           : parse_bool,
+		'vnc_password'  : function(x) { return ''+x; }
+	};
+
+	Object.keys(keys).forEach(function(key) {
+		if(opts[key] !== undefined) {
+			data[key] = keys[key](opts[key]);
+		}
+	});
+
+	debug.log("data = ", data);
+
+	return self._up._request('/1.0/server/'+self.uuid, {'server': data}, 'PUT');
+};
+
 // Exports
 module.exports = UpcloudServer;
 
