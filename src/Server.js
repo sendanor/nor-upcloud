@@ -32,6 +32,15 @@ UpcloudServer.prototype.valueOf = function() {
 	return tmp;
 };
 
+/** Get server details */
+UpcloudServer.prototype.getInfo = function(opts) {
+	var self = this;
+	opts = opts || {};
+	debug.assert(opts).typeOf('object');
+	debug.assert(self.uuid).typeOf('string');
+	return self._up._request('/1.1/server/'+self.uuid, {}, 'GET');
+};
+
 /* Start server */
 UpcloudServer.prototype.start = function(opts) {
 	var self = this;

@@ -122,6 +122,33 @@ COMMANDS['server-stop'] = function up_server_stop(opts) {
 	});
 };
 
+/** Get server defails */
+COMMANDS['server-info'] = function up_server_info(opts) {
+	opts = opts || {};
+	var which = opts.uuid || opts.hostname || opts.title;
+	debug.assert(which).is('string');
+
+	var UP = this;
+	return UP.server().then(function(data) {
+		debug.assert(data).is('object');
+		debug.assert(data.servers).is('object');
+		debug.assert(data.servers.server).is('object');
+		var servers = data.servers.server;
+		debug.assert(servers).is('array');
+
+		var servers_map = {};
+
+		servers.forEach(function(server) {
+			servers_map[ server.uuid ] = server;
+			servers_map[ server.hostname ] = server;
+			servers_map[ server.title ] = server;
+		});
+
+		var server = servers_map[which];
+		return server.getInfo();
+	});
+};
+
 /** JSON data view */
 VIEWS.json = function view_json(data) {
 	return Q.fcall(function stringify_json() {
@@ -133,7 +160,7 @@ VIEWS.json = function view_json(data) {
 VIEWS.table = function view_table(data) {
 
 	/* Print array as table */
-	function do_table(arr) {
+	function do_table(arr, title) {
 		var map_of_keys = {};
 		arr.forEach(function(obj) {
 			Object.keys(obj).filter(function(key) {
@@ -146,7 +173,7 @@ VIEWS.table = function view_table(data) {
 		var keys = Object.keys(map_of_keys);
 		keys.sort();
 
-		return [].concat(
+		return ['=== ' + title + ' ==='].concat(
 			[keys.join(' | ')]
 		).concat( 
 			[keys.map(function(k) {
@@ -162,43 +189,43 @@ VIEWS.table = function view_table(data) {
 	}
 
 	if(is.array(data)) {
-		return do_table(data);
+		return do_table(data, 'root');
 	}
 
 	if(!is.obj(data)) {
-		return util.inspect(data);
+		return 'root = ' + util.inspect(data);
 	}
 
 	return Object.keys(data).map(function(key) {
 		var value = data[key];
 
 		if(is.array(value)) {
-			return do_table(value);
+			return do_table(value, [key].join('.'));
 		}
 
 		if(!is.obj(value)) {
-			return util.inspect(value);
+			return [key].join('.') + ' = ' + util.inspect(value);
 		}
 
 		return Object.keys(value).map(function(key2) {
 			var value2 = value[key2];
 
 			if(is.array(value2)) {
-				return do_table(value2);
+				return do_table(value2, [key, key2].join('.'));
 			}
 
 			if(!is.obj(value2)) {
-				return util.inspect(value2);
+				return [key, key2].join('.') + ' = ' + util.inspect(value2);
 			}
 
 			return Object.keys(value2).map(function(key3) {
 				var value3 = value2[key3];
 
 				if(is.array(value3)) {
-					return do_table(value3);
+					return do_table(value3, [key, key2, key3].join('.'));
 				}
 
-				return util.inspect(value3);
+				return [key, key2, key3].join('.') + ' = ' + util.inspect(value3);
 			}).join('\n');
 		}).join('\n');
 

@@ -26,14 +26,15 @@ Then you can:
 * List servers: `nor-upcloud server-list`
 * Start server: `nor-upcloud --hostname=foo.example.com server-start`
 * Stop server: `nor-upcloud --hostname=foo.example.com server-stop`
+* Get data for server: `nor-upcloud --hostname=foo.example.com server-info`
 
 To select a server you can use any of these:
 
-* `--username`
-* `--uuid`
-* `--title`
+* `--hostname=NAME`
+* `--uuid=UUID`
+* `--title=TITLE`
 
-You can switch the view by:
+You can switch the view type using:
 
-* `--view=json`
 * `--view=table` (default)
+* `--view=json`
