@@ -1,6 +1,6 @@
 {
   "name": "nor-upcloud",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "Client module for Upcloud API",
   "main": "src/index.js",
   "bin": {
@@ -28,7 +28,7 @@
   "dependencies": {
     "nor-debug"  : ">= 0.1.49 < 0.2.0",
     "nor-is"     : ">= 0.1.16 < 0.2.0",
-    "nor-errors" : ">= 0.1.3  < 0.2.0",
+    "nor-errors" : ">= 0.1.4  < 0.2.0",
     "minimist"   : ">= 0.1.0  < 0.2.0",
     "q"          : ">= 1.0.1  < 1.1.0"
   },
